@@ -22,7 +22,7 @@
 //=== Project header files
 #include "acs.h"
 
-ACS acs = {};
+ACS acs = {}; ///< Info about this object
 
 //=== Serial configuration
 static SerialConfig ser_cfg ={
@@ -38,7 +38,7 @@ static void app_init(void) {
 	canRPDOObjectInit(CAN_PDO_1,CAN_ID_DEFAULT,CAN_BUF_SIZE,acs.can_buf.recv);
 	canTPDOObjectInit(CAN_PDO_1,CAN_ID_DEFAULT,0,0,CAN_BUF_SIZE,acs.can_buf.send);
 	// Start up debug output
-	sdStart(&SD2, &ser_cfg);
+	sdStart(&SD2, &ser_cfg);  ///< @param sdStart What does this do?
 }
 
 static void app_main(void) {

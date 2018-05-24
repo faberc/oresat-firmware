@@ -151,7 +151,7 @@ static int trap_mtqr_stop(ACS *acs){
 static int trap_rw_stretch(ACS *acs)
 {
   (void)acs;
-  // TODO have a better data system.
+  /// TODO have a better data system.
   acs->motor.stretch = acs->data;
   return EXIT_SUCCESS;
 }
@@ -159,7 +159,7 @@ static int trap_rw_stretch(ACS *acs)
 static int trap_rw_control(ACS *acs)
 {
   (void)acs;
-  // TODO have a better data system.
+  /// TODO have a better data system.
   acs->motor.openLoop = (bool) acs->data;
   return EXIT_SUCCESS;
 }
@@ -167,7 +167,7 @@ static int trap_rw_control(ACS *acs)
 static int trap_rw_skip(ACS *acs)
 {
   (void)acs;
-  // TODO have a better data system.
+  /// TODO have a better data system.
   acs->motor.skip = acs->data;
   return EXIT_SUCCESS;
 }
@@ -175,20 +175,20 @@ static int trap_rw_skip(ACS *acs)
 static int trap_rw_scale(ACS *acs)
 {
   (void)acs;
-  // TODO have a better data system.
+  /// TODO have a better data system.
   acs->motor.scale = acs->data;
   return EXIT_SUCCESS;
 }
 
 const acs_trap trap[] = {
-	{ST_RW, 	EV_RW_START,		&trap_rw_start},
-	{ST_RW, 	EV_RW_STOP,			&trap_rw_stop},
-  {ST_RW,   EV_RW_STRETCH,	&trap_rw_stretch},
-  {ST_RW,   EV_RW_CONTROL,	&trap_rw_control},
-  {ST_RW,   EV_RW_SKIP,			&trap_rw_skip},
-  {ST_RW,   EV_RW_SCALE,   	&trap_rw_scale},
-	{ST_MTQR,	EV_MTQR_START,	&trap_mtqr_start},
-	{ST_MTQR,	EV_MTQR_STOP,		&trap_mtqr_stop},
+	{ST_RW,   EV_RW_START,		&trap_rw_start},
+	{ST_RW,   EV_RW_STOP,		&trap_rw_stop},
+  	{ST_RW,   EV_RW_STRETCH,	&trap_rw_stretch},
+  	{ST_RW,   EV_RW_CONTROL,	&trap_rw_control},
+  	{ST_RW,   EV_RW_SKIP,		&trap_rw_skip},
+  	{ST_RW,   EV_RW_SCALE,   	&trap_rw_scale},
+	{ST_MTQR, EV_MTQR_START,	&trap_mtqr_start},
+	{ST_MTQR, EV_MTQR_STOP,		&trap_mtqr_stop},
 };
 
 #define EVENT_COUNT (int)(sizeof(trap)/sizeof(acs_trap))
@@ -251,9 +251,9 @@ static acs_event getNextEvent(ACS *acs){
       acs->data = recv[ARG_BYTE+1];			
 			break;
 		case CALL_TRAP:
-			//	event = EV_STATUS;
-			// TODO: we should seperate the trap from the change
-			// state command
+			///	event = EV_STATUS;
+			/// TODO: we should seperate the trap from the change
+			/// state command
 			break;
 		default:
 			break;

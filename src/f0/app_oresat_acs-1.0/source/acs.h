@@ -69,21 +69,21 @@ typedef enum{
 }acs_state;
 
 typedef enum {
-	EV_ANY=-1,
-	EV_OFF,					/// 0
-	EV_INIT,				/// 1
-	EV_RDY,					/// 2
-	EV_RW,					/// 3
-	EV_MTQR,				/// 4
-	EV_RW_START,		/// 5
-	EV_RW_STOP,			/// 6
-  EV_RW_STRETCH,  /// 7
-  EV_RW_CONTROL,  /// 8
-  EV_RW_SKIP,     /// 9
-  EV_RW_SCALE,    /// a
-	EV_MTQR_START,  /// b
-	EV_MTQR_STOP,   /// c
-	EV_END // this must be the last event
+	EV_ANY=-1,		///< -1
+	EV_OFF,			///< 0
+	EV_INIT,		///< 1
+	EV_RDY,			///< 2
+	EV_RW,			///< 3
+	EV_MTQR,		///< 4
+	EV_RW_START,		///< 5
+	EV_RW_STOP,		///< 6
+  	EV_RW_STRETCH,  	///< 7
+  	EV_RW_CONTROL,  	///< 8
+  	EV_RW_SKIP,     	///< 9
+  	EV_RW_SCALE,    	///< a
+	EV_MTQR_START,  	///< b
+	EV_MTQR_STOP,   	///< c
+	EV_END ///< this must be the last event
 }acs_event;
 
 typedef struct{
@@ -97,7 +97,7 @@ typedef struct{
 	can_buffer can_buf;
 	bldc motor;
 	MTQR mtqr;
-  // TODO find a better way to handle it
+  /// TODO find a better way to handle it
   uint8_t data;
 }ACS;
 
