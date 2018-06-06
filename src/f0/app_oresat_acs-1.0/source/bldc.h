@@ -29,6 +29,7 @@
 #define SCALE			100
 #define STEPS			360 
 #define STRETCH		1
+#define REPEAT    1
 #define SKIP      1
 #define STEP_SIZE 100
 
@@ -61,13 +62,15 @@ typedef struct{
 					 scale,		// scales the duty cycle
 					 steps,		// number of steps in lut 
 					 stretch,
+           repeat,
 					 skip;  
 	sinctrl_t u,v,w,// signals
 						phase_shift;		// 
   uint16_t current_sin_u, next_sin_u,
            current_sin_v, next_sin_v,
            current_sin_w, next_sin_w;
-  uint8_t stretch_count;
+  uint8_t stretch_count,
+          repeat_count;
   uint8_t sin_diff;
 	uint16_t position;				// motor position from encoder
   bool openLoop;
