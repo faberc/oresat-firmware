@@ -133,7 +133,7 @@ static int trap_mtqr_dc(ACS *acs){
 	acs->can_buf.send[LAST_TRAP]=EV_MTQR_DC;
 	chSysUnlock();
 	// *******end critical section**********
-	mtqrSetDC((acs->recv[ARG_BYTE+1]<<8) |	acs->recv[ARG_BYTE+2]);
+	mtqrSetDC(acs->data);
 	return EXIT_SUCCESS;
 }
 
@@ -250,7 +250,7 @@ static acs_event getNextEvent(ACS *acs){
 			break;
 		case CHG_STATE:
 			event = acs->recv[ARG_BYTE];
-      acs->data = acs->recv[ARG_BYTE+1];			
+      acs->data = (acs->recv[ARG_BYTE+1] << 8) | acs->recv[ARG_BYTE+2];			
 			break;
 		case CALL_TRAP:
 			//	event = EV_STATUS;
@@ -299,6 +299,7 @@ static int acs_statemachine(ACS *acs){
     chprintf(DEBUG_CHP, "motor skip: %d\r\n\n", acs->motor.skip);
     chprintf(DEBUG_CHP, "motor scale: %d\r\n\n", acs->motor.scale);
     chprintf(DEBUG_CHP, "motor samples: %d\r\n\n", acs->motor.samples[0]);
+    chprintf(DEBUG_CHP, "mtqr dc: %d\r\n\n", acs->mtqr.pwm_dc);
 
 	}
 	

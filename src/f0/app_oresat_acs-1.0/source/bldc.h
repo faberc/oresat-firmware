@@ -14,7 +14,6 @@
 
 #include <unistd.h>
 
-#define OPENLOOP /// open loop control (oxymoron)
 
 //#define THREAD_SIZE	(1<<7)
 // TODO had to reduce this to compile with new ADC code
@@ -23,6 +22,9 @@
 
 #define DEBUG_SERIAL SD2
 #define DEBUG_CHP ((BaseSequentialStream *) &DEBUG_SERIAL)
+
+#define SINUSOIDAL
+//#define TRAPEZOIDAL
 
 #define SCALE			100
 #define STEPS			360 

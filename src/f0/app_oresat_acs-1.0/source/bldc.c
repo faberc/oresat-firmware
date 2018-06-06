@@ -84,43 +84,39 @@ static sinctrl_t scale(sinctrl_t duty_cycle){
 static void pwmpcb(PWMDriver *pwmp) {
   (void)pwmp;
   
-	if(motor->openLoop){
-		motor->u += motor->skip;
-		motor->v += motor->skip;
-		motor->w += motor->skip;
 
-		motor->u = motor->u % 360;
-		motor->v = motor->v % 360;
-		motor->w = motor->w % 360;
-				
-		motor->current_sin_u = motor->sinctrl[motor->u];
-		motor->current_sin_v = motor->sinctrl[motor->v];
-		motor->current_sin_w = motor->sinctrl[motor->w];
-	}else{
-		if (motor->stretch_count == 0){
-			motor->u = encoderToLut(motor->position);
-			motor->v = (motor->u + motor->phase_shift) % 360;
-			motor->w = (motor->v + motor->phase_shift) % 360;
-			motor->current_sin_u = motor->sinctrl[motor->u];
-			motor->current_sin_v = motor->sinctrl[motor->v];
-			motor->current_sin_w = motor->sinctrl[motor->w];
-			motor->next_sin_u = motor->sinctrl[motor->u+1];
-			motor->next_sin_v = motor->sinctrl[motor->v+1];
-			motor->next_sin_w = motor->sinctrl[motor->w+1];
+if (motor->stretch_count == 0)
+{
+  if (motor->openLoop)
+  {
+    motor->u = (motor->u + 1) % motor->steps;
+  }
+  else
+  {
+    motor->u = encoderToLut(motor->position);
+  }
+  motor->v = (motor->u + motor->phase_shift) % 360;
+  motor->w = (motor->v + motor->phase_shift) % 360;
+  motor->current_sin_u = motor->sinctrl[motor->u];
+  motor->current_sin_v = motor->sinctrl[motor->v];
+  motor->current_sin_w = motor->sinctrl[motor->w];
+  motor->next_sin_u = motor->sinctrl[motor->u+1];
+  motor->next_sin_v = motor->sinctrl[motor->v+1];
+  motor->next_sin_w = motor->sinctrl[motor->w+1];
 
-			motor->sin_diff = (motor->current_sin_u > motor->next_sin_u)?
-												(motor->current_sin_u - motor->next_sin_u) : 
-												(motor->next_sin_u - motor->current_sin_u);
-			motor->sin_diff = motor->sin_diff / motor->stretch;
-			motor->stretch_count = motor->stretch;
-		}
+  motor->sin_diff = (motor->current_sin_u > motor->next_sin_u) ? (motor->current_sin_u - motor->next_sin_u) : (motor->next_sin_u - motor->current_sin_u);
+  motor->sin_diff = motor->sin_diff / motor->stretch;
+  motor->stretch_count = motor->stretch;
+}
 
-		motor->current_sin_u += motor->sin_diff;
-		motor->current_sin_v += motor->sin_diff;
-		motor->current_sin_w += motor->sin_diff;
+  motor->current_sin_u += motor->sin_diff;
+  motor->current_sin_v += motor->sin_diff;
+  motor->current_sin_w += motor->sin_diff;
 
-		motor->stretch_count = motor->stretch_count - 1;
-	}
+  motor->stretch_count = motor->stretch_count - 1;
+
+
+
 
 	bldcSetDC(PWM_U,motor->current_sin_u);
 	bldcSetDC(PWM_V,motor->current_sin_v);
@@ -149,7 +145,7 @@ extern void bldcInit(bldc *pbldc){
   motor->stretch_count = 0;
 	motor->scale = SCALE;
   motor->skip = SKIP;
-	motor->sinctrl = sinctrl360;
+	motor->sinctrl = waveForm;
 	motor->count = 0;
 	motor->position = 0;
 	motor->phase_shift = motor->steps/3;
