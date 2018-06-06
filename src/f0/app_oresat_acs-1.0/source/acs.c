@@ -148,6 +148,18 @@ static int trap_mtqr_dir(ACS *acs){
 	return EXIT_SUCCESS;
 }
 
+static int trap_mtqr_demo(ACS *acs){
+        (void)acs;
+	// *******critical section**********
+	chSysLock();
+        acs->can_buf.send[LAST_TRAP] = EV_MTQR_DEMO;
+	chSysUnlock();
+	// *******end critical section**********
+        
+        mtqrDemo();
+        return EXIT_SUCCESS;
+}
+
 static int trap_rw_stretch(ACS *acs)
 {
   (void)acs;
@@ -191,6 +203,7 @@ const acs_trap trap[] = {
 	{ST_MTQR,	EV_MTQR_STOP,		&trap_mtqr_stop},
 	{ST_MTQR,	EV_MTQR_DC,			&trap_mtqr_dc},
 	{ST_MTQR,	EV_MTQR_DIR,		&trap_mtqr_dir},
+	{ST_MTQR,	EV_MTQR_DEMO,		&trap_mtqr_demo},
 };
 
 #define EVENT_COUNT (int)(sizeof(trap)/sizeof(acs_trap))

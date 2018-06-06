@@ -59,6 +59,7 @@ extern void mtqrStart(MTQR *mtqr);
 extern void mtqrStop(MTQR *mtqr);
 extern void mtqrSetDC(uint16_t dc);
 extern void mtqrSetDir(uint8_t dc);
+extern void mtqrDemo(void);
 extern void mtqrExit(MTQR *mtqr);
 	
 #endif

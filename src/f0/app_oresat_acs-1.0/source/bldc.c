@@ -52,6 +52,7 @@ THD_FUNCTION(spiThread,arg){
 		motor->spi_rxbuf[0] = 0;
 		spiSelect(&SPID1);                  // Select slave.
 
+                // We need to add some sort of timeout here so we don't hang.
 		while(SPID1.state != SPI_READY) {}   
 		spiReceive(&SPID1,1,motor->spi_rxbuf); // Receive 1 frame (16 bits).
 		spiUnselect(&SPID1);                // Unselect slave.

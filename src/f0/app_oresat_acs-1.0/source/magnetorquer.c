@@ -61,11 +61,35 @@ extern void mtqrSetDir(uint8_t dc){
 	}
 }
 
+extern void mtqrDemo(void){
+
+        palClearPad(GPIOA,PH);  // Phase selection. 
+	pwmEnableChannel(
+		&PWMD1,
+		PWM_CH_MTQR,
+		PWM_PERCENTAGE_TO_WIDTH(&PWMD1,2000)
+	);
+
+        chThdSleepMilliseconds(10000);
+        pwmDisableChannel(&PWMD1,PWM_CH_MTQR);
+        palSetPad(GPIOA,PH);  // Phase selection. 
+
+	pwmEnableChannel(
+		&PWMD1,
+		PWM_CH_MTQR,
+		PWM_PERCENTAGE_TO_WIDTH(&PWMD1,8000)
+	);
+
+        chThdSleepMilliseconds(10000);
+        pwmDisableChannel(&PWMD1,PWM_CH_MTQR);
+}
+
 extern void mtqrExit(MTQR *mtqr){
 	if(!mtqr->started){	
 		return;
 	}
 	mtqrStop(mtqr);
 }
+
 
 
