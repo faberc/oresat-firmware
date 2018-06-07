@@ -54,7 +54,7 @@ typedef struct{
 extern void mtqrInit(MTQR *mtqr);
 extern void mtqrStart(MTQR *mtqr);
 extern void mtqrStop(MTQR *mtqr);
-extern void mtqrSetDC(uint16_t dc);
+extern void mtqrSetDC(MTQR *mtqr, uint16_t dc);
 extern void mtqrSetDir(uint8_t dc);
 extern void mtqrExit(MTQR *mtqr);
 	

@@ -18,7 +18,7 @@ extern void mtqrStart(MTQR *mtqr){
 //	palSetPadMode(GPIOA,PH,PAL_MODE_ALTERNATE(0));
 //	palClearPad(GPIOA,PH);
 	pwmStart(&PWMD1,&pwm_MTQRcfg);
-	mtqrSetDC(MTQR_STARTING_DC);
+	mtqrSetDC(mtqr, MTQR_STARTING_DC);
 	palSetPad(GPIOB,ENABLE);        // Set Enable high.
 	mtqr->started	= TRUE;
 }
@@ -34,12 +34,13 @@ extern void mtqrStop(MTQR *mtqr){
 	mtqr->started	= FALSE;
 }
 
-extern void mtqrSetDC(uint16_t dc){
+extern void mtqrSetDC(MTQR *mtqr, uint16_t dc){
 	pwmEnableChannel(
 		&PWMD1,
 		PWM_CH_MTQR,
 		PWM_PERCENTAGE_TO_WIDTH(&PWMD1,dc)
 	);
+  mtqr->pwm_dc = dc;
 }
 
 extern void mtqrSetDir(uint8_t dc){

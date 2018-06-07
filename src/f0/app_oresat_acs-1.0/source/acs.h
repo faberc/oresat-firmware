@@ -98,7 +98,7 @@ typedef struct{
 	bldc motor;
 	MTQR mtqr;
   // TODO find a better way to handle it
-  uint8_t data;
+  uint16_t data;
 	uint8_t recv[CAN_BUF_SIZE];
 }ACS;
 

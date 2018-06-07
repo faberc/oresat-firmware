@@ -31,7 +31,7 @@
 #define STRETCH		1
 #define REPEAT    1
 #define SKIP      1
-#define STEP_SIZE 100
+#define STEP_SIZE 1
 
 #define ENCODER_MAX 1<<14
 #define CHUNK_AMOUNT 6
