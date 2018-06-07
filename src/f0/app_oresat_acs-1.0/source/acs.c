@@ -155,7 +155,15 @@ static int trap_mtqr_demo(ACS *acs){
         acs->can_buf.send[LAST_TRAP] = EV_MTQR_DEMO;
 	chSysUnlock();
 	// *******end critical section**********
-        
+      	chThdCreateStatic(
+	  mtqrDemoThread,
+	  sizeof(wa_acsThread), 
+		NORMALPRIO+1, 
+		acsThread, 
+		&acs	
+	);
+
+
         mtqrDemo();
         return EXIT_SUCCESS;
 }
