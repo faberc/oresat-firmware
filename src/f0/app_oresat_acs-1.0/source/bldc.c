@@ -115,9 +115,9 @@ if (motor->stretch_count == 0)
   motor->current_sin_w += motor->sin_diff;
 
   motor->stretch_count = motor->stretch_count - 1;
-  motor->repeat_count = motor->repeat + 1;
+  //motor->repeat_count = motor->repeat + 1;
 //}
-  motor->repeat_count = motor->repeat_count - 1;
+  //motor->repeat_count = motor->repeat_count - 1;
 	bldcSetDC(PWM_U,motor->current_sin_u);
 	bldcSetDC(PWM_V,motor->current_sin_v);
 	bldcSetDC(PWM_W,motor->current_sin_w);
