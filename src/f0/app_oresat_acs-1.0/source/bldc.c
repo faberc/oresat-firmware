@@ -118,9 +118,9 @@ if (motor->stretch_count == 0)
   motor->repeat_count = motor->repeat;
 }
   motor->repeat_count = motor->repeat_count - 1;
-	bldcSetDC(PWM_U,motor->current_sin_u-5000);
-	bldcSetDC(PWM_V,motor->current_sin_v-5000);
-	bldcSetDC(PWM_W,motor->current_sin_w-5000);
+	bldcSetDC(PWM_U,motor->current_sin_u);
+	bldcSetDC(PWM_V,motor->current_sin_v);
+	bldcSetDC(PWM_W,motor->current_sin_w);
 
 }
 
