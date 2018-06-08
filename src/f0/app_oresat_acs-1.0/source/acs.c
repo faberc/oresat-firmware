@@ -2,6 +2,7 @@
 
 event_listener_t el;
 
+static uint16_t freq = PWM_TIMER_FREQ/PWM_FREQ;
 
 /**
  * @brief  cleans up on transition
@@ -133,7 +134,7 @@ static int trap_mtqr_dc(ACS *acs){
 	acs->can_buf.send[LAST_TRAP]=EV_MTQR_DC;
 	chSysUnlock();
 	// *******end critical section**********
-	mtqrSetDC((acs->recv[ARG_BYTE+1]<<8) |	acs->recv[ARG_BYTE+2]);
+	//mtqrSetDC(&acs->mtqr, acs->data);
 	return EXIT_SUCCESS;
 }
 
@@ -180,6 +181,15 @@ static int trap_rw_scale(ACS *acs)
   return EXIT_SUCCESS;
 }
 
+static int trap_rw_period(ACS *acs)
+{
+  (void)acs;
+  freq = PWM_TIMER_FREQ / acs->data;
+  pwmChangePeriodI(&PWMD1, freq);
+  return EXIT_SUCCESS;
+}
+
+
 const acs_trap trap[] = {
 	{ST_RW, 	EV_RW_START,		&trap_rw_start},
 	{ST_RW, 	EV_RW_STOP,			&trap_rw_stop},
@@ -187,6 +197,7 @@ const acs_trap trap[] = {
   {ST_RW,   EV_RW_CONTROL,	&trap_rw_control},
   {ST_RW,   EV_RW_SKIP,			&trap_rw_skip},
   {ST_RW,   EV_RW_SCALE,   	&trap_rw_scale},
+  //{ST_RW,   EV_RW_PERIOD,   &trap_rw_period},
 	{ST_MTQR,	EV_MTQR_START,	&trap_mtqr_start},
 	{ST_MTQR,	EV_MTQR_STOP,		&trap_mtqr_stop},
 	{ST_MTQR,	EV_MTQR_DC,			&trap_mtqr_dc},
@@ -250,7 +261,7 @@ static acs_event getNextEvent(ACS *acs){
 			break;
 		case CHG_STATE:
 			event = acs->recv[ARG_BYTE];
-      acs->data = acs->recv[ARG_BYTE+1];			
+      acs->data = (acs->recv[ARG_BYTE1] << 8) | acs->recv[ARG_BYTE2];			
 			break;
 		case CALL_TRAP:
 			//	event = EV_STATUS;
@@ -296,9 +307,11 @@ static int acs_statemachine(ACS *acs){
     chThdSleepMilliseconds(500);
     chprintf(DEBUG_CHP, "motor stretch: %d\r\n", acs->motor.stretch);
     chprintf(DEBUG_CHP, "motor openLoop: %d\r\n", acs->motor.openLoop);
-    chprintf(DEBUG_CHP, "motor skip: %d\r\n\n", acs->motor.skip);
-    chprintf(DEBUG_CHP, "motor scale: %d\r\n\n", acs->motor.scale);
-    chprintf(DEBUG_CHP, "motor samples: %d\r\n\n", acs->motor.samples[0]);
+    chprintf(DEBUG_CHP, "motor skip: %d\r\n", acs->motor.skip);
+    chprintf(DEBUG_CHP, "motor scale: %d\r\n", acs->motor.scale);
+    chprintf(DEBUG_CHP, "motor samples: %d\r\n", acs->motor.samples[0]);
+    chprintf(DEBUG_CHP, "mtqr dc: %d\r\n", acs->mtqr.pwm_dc);
+    chprintf(DEBUG_CHP, "encoder: %d\r\n\n", acs->motor.position);
 
 	}
 	
@@ -318,4 +331,4 @@ THD_FUNCTION(acsThread,acs){
 
 	acs_statemachine(acs);
 }
- 
+

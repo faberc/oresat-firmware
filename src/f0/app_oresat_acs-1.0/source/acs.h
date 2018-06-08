@@ -103,6 +103,7 @@ typedef struct{
 	MTQR mtqr;
   // TODO find a better way to handle it
   uint8_t data;
+        //bool dir;
 	uint8_t recv[CAN_BUF_SIZE];
 }ACS;
 

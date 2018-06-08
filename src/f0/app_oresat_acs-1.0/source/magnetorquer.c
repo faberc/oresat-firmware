@@ -3,21 +3,22 @@
 static void pwmpcb(PWMDriver *pwmp) {
   (void)pwmp;
  
-       /* palClearPad(GPIOA,PH);  // Phase selection. 
+        //palSetPad(GPIOA,PH);  // Phase selection. 
+        //palClearPad(GPIOA,PH);  // Phase selection. 
 	pwmEnableChannel(
 		&PWMD1,
 		PWM_CH_MTQR,
 		PWM_PERCENTAGE_TO_WIDTH(&PWMD1,9000)
 	);
 
-        chThdSleepMilliseconds(10000);
-        palSetPad(GPIOA,PH);  // Phase selection. 
+ /*       palSetPad(GPIOA,PH);  // Phase selection. 
         pwmEnableChannel(
 		&PWMD1,
 		PWM_CH_MTQR,
 		PWM_PERCENTAGE_TO_WIDTH(&PWMD1,4000)
 	);
-*/
+        */
+
 }
 
 static const PWMConfig pwm_MTQRcfg = {
@@ -39,7 +40,7 @@ static const PWMConfig pwm_MTQRcfg = {
 extern void mtqrInit(MTQR *mtqr){
 	(void)mtqr;
 	mtqr->started = FALSE;
-//	palSetPadMode(GPIOB,PH,PAL_MODE_OUTPUT_PUSHPULL); // Phase direction
+	//palSetPadMode(GPIOB,PH,PAL_MODE_OUTPUT_PUSHPULL); // Phase direction
 //	palClearPad(GPIOA,PH); /// phase direction 
 //	palClearPad(GPIOB,PH); /// phase direction // for dev
 /*
@@ -49,6 +50,7 @@ extern void mtqrInit(MTQR *mtqr){
 //*
 //  palSetPadMode(GPIOA,ENABLE,PAL_MODE_OUTPUT_PUSHPULL); 
 	palClearPad(GPIOB,ENABLE); /// for rev3
+        palClearPad(GPIOA,PH);  // Phase selection. 
 	//palClearPad(GPIOA,ENABLE); /// for dev
 //*/
 }
