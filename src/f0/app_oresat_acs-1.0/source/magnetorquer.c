@@ -5,6 +5,7 @@ static uint16_t count = 0;
 static uint16_t start = 0;
 static uint16_t stop = 1000;
 bool on = true;
+bool dir_on = true;
 
 static void pwmpcb(PWMDriver *pwmp) {
   (void)pwmp;
@@ -13,7 +14,7 @@ static void pwmpcb(PWMDriver *pwmp) {
         {
           if (!on)
           {
-            pwmEnableChannelI(
+                pwmEnableChannelI(
 		&PWMD1,
 		PWM_CH_MTQR,
 		PWM_PERCENTAGE_TO_WIDTH(&PWMD1,5000)
@@ -24,6 +25,17 @@ static void pwmpcb(PWMDriver *pwmp) {
           {
             pwmDisableChannelI(&PWMD1,PWM_CH_MTQR);
             on = false;
+            /*if(dir_on == true)
+            {
+              palSetPad(GPIOA,PH); /// phase direction 
+              dir_on = false;
+            }
+            else if(dir_on == false)
+            {
+              palClearPad(GPIOA,PH);
+              dir_on = true;
+            }
+*/
           }
 
           count = 0;
@@ -52,6 +64,7 @@ extern void mtqrInit(MTQR *mtqr){
 	(void)mtqr;
 	mtqr->started = FALSE;
         on = false;
+        dir_on = false;
 
 	//palSetPadMode(GPIOB,PH,PAL_MODE_OUTPUT_PUSHPULL); // Phase direction
 //	palClearPad(GPIOA,PH); /// phase direction 

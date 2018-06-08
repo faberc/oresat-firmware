@@ -9,7 +9,7 @@
 #include "oresat.h"
 
 #define WA_ACS_THD_SIZE (120)
-#define CAN_NODE 				0x3F // max 0x7f
+#define CAN_NODE 				0x5F // max 0x7f
 #define CAN_BUF_SIZE 		8
 
 #define DEBUG_SERIAL SD2
