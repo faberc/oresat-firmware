@@ -8,7 +8,7 @@
 #include "chprintf.h"
 #include "oresat.h"
 
-#define WA_ACS_THD_SIZE (1<<7)
+#define WA_ACS_THD_SIZE (120)
 #define CAN_NODE 				0x3F // max 0x7f
 #define CAN_BUF_SIZE 		8
 

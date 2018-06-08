@@ -1,23 +1,34 @@
 #include "magnetorquer.h"
 
+
+static uint16_t count = 0;
+static uint16_t start = 0;
+static uint16_t stop = 1000;
+bool on = true;
+
 static void pwmpcb(PWMDriver *pwmp) {
   (void)pwmp;
  
-        //palSetPad(GPIOA,PH);  // Phase selection. 
-        //palClearPad(GPIOA,PH);  // Phase selection. 
-	pwmEnableChannel(
+        if (count > 10000)
+        {
+          if (!on)
+          {
+            pwmEnableChannelI(
 		&PWMD1,
 		PWM_CH_MTQR,
-		PWM_PERCENTAGE_TO_WIDTH(&PWMD1,9000)
-	);
+		PWM_PERCENTAGE_TO_WIDTH(&PWMD1,5000)
+	    );
+            on = true;
+          }
+          else
+          {
+            pwmDisableChannelI(&PWMD1,PWM_CH_MTQR);
+            on = false;
+          }
 
- /*       palSetPad(GPIOA,PH);  // Phase selection. 
-        pwmEnableChannel(
-		&PWMD1,
-		PWM_CH_MTQR,
-		PWM_PERCENTAGE_TO_WIDTH(&PWMD1,4000)
-	);
-        */
+          count = 0;
+        }
+        count++;
 
 }
 
@@ -40,6 +51,8 @@ static const PWMConfig pwm_MTQRcfg = {
 extern void mtqrInit(MTQR *mtqr){
 	(void)mtqr;
 	mtqr->started = FALSE;
+        on = false;
+
 	//palSetPadMode(GPIOB,PH,PAL_MODE_OUTPUT_PUSHPULL); // Phase direction
 //	palClearPad(GPIOA,PH); /// phase direction 
 //	palClearPad(GPIOB,PH); /// phase direction // for dev
@@ -59,13 +72,18 @@ extern void mtqrStart(MTQR *mtqr){
 	if(mtqr->started){
 		return;
 	}
+
 	pwmStart(&PWMD1,&pwm_MTQRcfg);
-	mtqrSetDC(MTQR_STARTING_DC);
+	
+        pwmEnablePeriodicNotification(&PWMD1);
+        mtqrSetDC(MTQR_STARTING_DC);
 
 //	palSetPad(GPIOB,ENABLE);        // Set Enable high.
 	palSetPad(GPIOB,ENABLE);        // Set Enable high.
 	//palSetPad(GPIOA,ENABLE);        // Set Enable high.
+	palClearPad(GPIOA,PH);
 	mtqr->started	= TRUE;
+        on = true;
 }
 
 extern void mtqrStop(MTQR *mtqr){
