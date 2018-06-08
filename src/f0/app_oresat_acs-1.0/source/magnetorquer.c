@@ -1,5 +1,41 @@
 #include "magnetorquer.h"
 
+static void pwmpcb(PWMDriver *pwmp) {
+  (void)pwmp;
+ 
+       /* palClearPad(GPIOA,PH);  // Phase selection. 
+	pwmEnableChannel(
+		&PWMD1,
+		PWM_CH_MTQR,
+		PWM_PERCENTAGE_TO_WIDTH(&PWMD1,9000)
+	);
+
+        chThdSleepMilliseconds(10000);
+        palSetPad(GPIOA,PH);  // Phase selection. 
+        pwmEnableChannel(
+		&PWMD1,
+		PWM_CH_MTQR,
+		PWM_PERCENTAGE_TO_WIDTH(&PWMD1,4000)
+	);
+*/
+}
+
+static const PWMConfig pwm_MTQRcfg = {
+	MTQR_PWM_TIMER_FREQ,    // Frequency
+	MTQR_PWM_PERIOD,        // period duration 
+        pwmpcb,               	// Callback
+	{ // Channels
+		{PWM_OUTPUT_ACTIVE_HIGH,NULL},
+		{PWM_OUTPUT_DISABLED,NULL},
+		{PWM_OUTPUT_DISABLED,NULL},
+		{PWM_OUTPUT_DISABLED,NULL}
+	},
+	0,
+	0,
+	0
+};
+
+
 extern void mtqrInit(MTQR *mtqr){
 	(void)mtqr;
 	mtqr->started = FALSE;
@@ -23,6 +59,7 @@ extern void mtqrStart(MTQR *mtqr){
 	}
 	pwmStart(&PWMD1,&pwm_MTQRcfg);
 	mtqrSetDC(MTQR_STARTING_DC);
+
 //	palSetPad(GPIOB,ENABLE);        // Set Enable high.
 	palSetPad(GPIOB,ENABLE);        // Set Enable high.
 	//palSetPad(GPIOA,ENABLE);        // Set Enable high.
@@ -61,35 +98,11 @@ extern void mtqrSetDir(uint8_t dc){
 	}
 }
 
-extern void mtqrDemo(void){
-
-        palClearPad(GPIOA,PH);  // Phase selection. 
-	pwmEnableChannel(
-		&PWMD1,
-		PWM_CH_MTQR,
-		PWM_PERCENTAGE_TO_WIDTH(&PWMD1,2000)
-	);
-
-        chThdSleepMilliseconds(10000);
-        pwmDisableChannel(&PWMD1,PWM_CH_MTQR);
-        palSetPad(GPIOA,PH);  // Phase selection. 
-
-	pwmEnableChannel(
-		&PWMD1,
-		PWM_CH_MTQR,
-		PWM_PERCENTAGE_TO_WIDTH(&PWMD1,8000)
-	);
-
-        chThdSleepMilliseconds(10000);
-        pwmDisableChannel(&PWMD1,PWM_CH_MTQR);
-}
-
 extern void mtqrExit(MTQR *mtqr){
 	if(!mtqr->started){	
 		return;
 	}
 	mtqrStop(mtqr);
 }
-
 
 

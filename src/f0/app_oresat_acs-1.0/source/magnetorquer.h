@@ -33,21 +33,6 @@
  * 
  */
 
-static const PWMConfig pwm_MTQRcfg = {
-	MTQR_PWM_TIMER_FREQ,    // Frequency
-	MTQR_PWM_PERIOD,        // period duration 
-	NULL,               		// Callback
-	{ // Channels
-		{PWM_OUTPUT_ACTIVE_HIGH,NULL},
-		{PWM_OUTPUT_DISABLED,NULL},
-		{PWM_OUTPUT_DISABLED,NULL},
-		{PWM_OUTPUT_DISABLED,NULL}
-	},
-	0,
-	0,
-	0
-};
-
 typedef struct{
 	uint8_t direction;
 	int started;
@@ -59,7 +44,7 @@ extern void mtqrStart(MTQR *mtqr);
 extern void mtqrStop(MTQR *mtqr);
 extern void mtqrSetDC(uint16_t dc);
 extern void mtqrSetDir(uint8_t dc);
-extern void mtqrDemo(void);
 extern void mtqrExit(MTQR *mtqr);
+
 	
 #endif
