@@ -28,7 +28,7 @@
 
 #define SCALE			100
 #define STEPS			360 
-#define STRETCH		1
+#define STRETCH		16
 #define REPEAT    1
 #define SKIP      1
 #define STEP_SIZE 1

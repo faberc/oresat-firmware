@@ -8,8 +8,8 @@
 #include "chprintf.h"
 #include "oresat.h"
 
-#define WA_ACS_THD_SIZE (1<<7)
-#define CAN_NODE 				0x3F // max 0x7f
+#define WA_ACS_THD_SIZE (120)
+#define CAN_NODE 				0x4F // max 0x7f
 #define CAN_BUF_SIZE 		8
 
 #define DEBUG_SERIAL SD2
@@ -83,7 +83,7 @@ typedef enum {
 	EV_MTQR_STOP,   ///< c
 	EV_MTQR_DC,			///< d
 	EV_MTQR_DIR,		///< e
-  EV_RW_PERIOD,   ///< f
+  //EV_RW_PERIOD,   ///< f
 	EV_END /// this must be the last event
 }acs_event;
 

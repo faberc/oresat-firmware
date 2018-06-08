@@ -180,14 +180,14 @@ static int trap_rw_scale(ACS *acs)
   acs->motor.scale = acs->data;
   return EXIT_SUCCESS;
 }
-
+/*
 static int trap_rw_period(ACS *acs)
 {
   (void)acs;
   freq = PWM_TIMER_FREQ / acs->data;
   pwmChangePeriodI(&PWMD1, freq);
   return EXIT_SUCCESS;
-}
+}*/
 
 
 const acs_trap trap[] = {
@@ -197,7 +197,7 @@ const acs_trap trap[] = {
   {ST_RW,   EV_RW_CONTROL,	&trap_rw_control},
   {ST_RW,   EV_RW_SKIP,			&trap_rw_skip},
   {ST_RW,   EV_RW_SCALE,   	&trap_rw_scale},
-  {ST_RW,   EV_RW_PERIOD,   &trap_rw_period},
+  //{ST_RW,   EV_RW_PERIOD,   &trap_rw_period},
 	{ST_MTQR,	EV_MTQR_START,	&trap_mtqr_start},
 	{ST_MTQR,	EV_MTQR_STOP,		&trap_mtqr_stop},
 	{ST_MTQR,	EV_MTQR_DC,			&trap_mtqr_dc},

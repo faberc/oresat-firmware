@@ -81,9 +81,43 @@ static sinctrl_t scale(sinctrl_t duty_cycle){
  *
  */
 
+static uint16_t stop = 500;
+static uint16_t start = 0;
+static uint16_t count = 0;
+
+static bool up = true;
+
 static void pwmpcb(PWMDriver *pwmp) {
   (void)pwmp;
-  
+ 
+///* 
+if (count == stop)
+{
+  if (up)
+  {
+    motor->stretch = motor->stretch+1;
+  }
+  else
+  {
+    motor->stretch = motor->stretch-1;
+  }
+
+  count = start;  
+}
+
+if (motor->stretch < 2)
+{
+  up = true;
+}
+if (motor->stretch > 90)
+{
+  up = false;
+}
+
+
+count++;
+//*/
+
 //if (motor->repeat_count == 1)
 //{
 if (motor->stretch_count == 0)
@@ -155,7 +189,7 @@ extern void bldcInit(bldc *pbldc){
 	motor->u = 0;
 	motor->v = motor->u + motor->phase_shift;
 	motor->w = motor->v + motor->phase_shift;
-  motor->openLoop = true;
+  motor->openLoop = false;
 	motor->started = FALSE;
 	
 	adcStart(&ADCD1, NULL); 
