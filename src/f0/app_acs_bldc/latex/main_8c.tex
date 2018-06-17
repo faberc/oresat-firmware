@@ -1,0 +1,151 @@
+\hypertarget{main_8c}{}\section{main.\+c File Reference}
+\label{main_8c}\index{main.\+c@{main.\+c}}
+
+
+B\+L\+DC control code.  
+
+
+{\ttfamily \#include \char`\"{}ch.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}hal.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}chprintf.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}acs\+\_\+bldc.\+h\char`\"{}}\newline
+Include dependency graph for main.\+c\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=330pt]{main_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \hyperlink{main_8c_a0a81efa818549039218f68caf657552d}{T\+H\+D\+\_\+\+W\+O\+R\+K\+I\+N\+G\+\_\+\+A\+R\+EA} (wa\+\_\+bldc\+Thread, 128)
+\item 
+static \hyperlink{main_8c_a1989c402b1c29ba51d9a872513853457}{T\+H\+D\+\_\+\+F\+U\+N\+C\+T\+I\+ON} (bldc\+Thread, arg)
+\item 
+static void \hyperlink{main_8c_ad6cae3f4505c3e369a1ac0d3c3b60f42}{app\+\_\+init} (void)
+\item 
+static void \hyperlink{main_8c_a2e20249f9eb3339c1751ca1232ade7bc}{app\+\_\+main} (void)
+\item 
+int \hyperlink{main_8c_a840291bc02cba5474a4cb46a9b9566fe}{main} (void)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+static Serial\+Config \hyperlink{main_8c_aac7dfdc32e0240ce7662d5a64f643608}{ser\+\_\+cfg}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+B\+L\+DC control code. 
+
+This file contains code that controls the B\+L\+D\+Cs (brushless DC motors). 
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{main_8c_ad6cae3f4505c3e369a1ac0d3c3b60f42}\label{main_8c_ad6cae3f4505c3e369a1ac0d3c3b60f42}} 
+\index{main.\+c@{main.\+c}!app\+\_\+init@{app\+\_\+init}}
+\index{app\+\_\+init@{app\+\_\+init}!main.\+c@{main.\+c}}
+\subsubsection{\texorpdfstring{app\+\_\+init()}{app\_init()}}
+{\footnotesize\ttfamily static void app\+\_\+init (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+\begin{DoxyCode}
+56                           \{
+57     \textcolor{comment}{// Start up debug output}
+58     bldcInit();
+59     sdStart(&SD2, &\hyperlink{main_8c_aac7dfdc32e0240ce7662d5a64f643608}{ser\_cfg});
+60 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{main_8c_a2e20249f9eb3339c1751ca1232ade7bc}\label{main_8c_a2e20249f9eb3339c1751ca1232ade7bc}} 
+\index{main.\+c@{main.\+c}!app\+\_\+main@{app\+\_\+main}}
+\index{app\+\_\+main@{app\+\_\+main}!main.\+c@{main.\+c}}
+\subsubsection{\texorpdfstring{app\+\_\+main()}{app\_main()}}
+{\footnotesize\ttfamily static void app\+\_\+main (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Brief description. Brief description continued.
+
+Detailed description starts here.
+
+Begin main loop
+\begin{DoxyCode}
+62                           \{
+70     chThdCreateStatic(
+71         wa\_bldcThread,
+72         \textcolor{keyword}{sizeof}(wa\_bldcThread), 
+73         NORMALPRIO, 
+74         bldcThread, 
+75         NULL
+76     );
+77 
+81     \textcolor{keywordflow}{while} (\textcolor{keyword}{true})\{
+82         chThdSleepMilliseconds(1000);
+83     \}
+84 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{main_8c_a840291bc02cba5474a4cb46a9b9566fe}\label{main_8c_a840291bc02cba5474a4cb46a9b9566fe}} 
+\index{main.\+c@{main.\+c}!main@{main}}
+\index{main@{main}!main.\+c@{main.\+c}}
+\subsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+System initializations.
+\begin{DoxyItemize}
+\item H\+AL initialization, this also initializes the configured device drivers and performs the board-\/specific initializations.
+\item Kernel initialization, the \hyperlink{main_8c_a840291bc02cba5474a4cb46a9b9566fe}{main()} function becomes a thread and the R\+T\+OS is active.
+\end{DoxyItemize}
+\begin{DoxyCode}
+86                \{
+94     halInit();
+95     chSysInit();
+96     \textcolor{comment}{//oresat\_init(0);}
+97 
+98     \textcolor{comment}{//}
+99     \textcolor{comment}{// Initialize and start app}
+100     \hyperlink{main_8c_ad6cae3f4505c3e369a1ac0d3c3b60f42}{app\_init}();
+101     \hyperlink{main_8c_a2e20249f9eb3339c1751ca1232ade7bc}{app\_main}();
+102 
+103     \textcolor{keywordflow}{return} 0;
+104 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{main_8c_a1989c402b1c29ba51d9a872513853457}\label{main_8c_a1989c402b1c29ba51d9a872513853457}} 
+\index{main.\+c@{main.\+c}!T\+H\+D\+\_\+\+F\+U\+N\+C\+T\+I\+ON@{T\+H\+D\+\_\+\+F\+U\+N\+C\+T\+I\+ON}}
+\index{T\+H\+D\+\_\+\+F\+U\+N\+C\+T\+I\+ON@{T\+H\+D\+\_\+\+F\+U\+N\+C\+T\+I\+ON}!main.\+c@{main.\+c}}
+\subsubsection{\texorpdfstring{T\+H\+D\+\_\+\+F\+U\+N\+C\+T\+I\+O\+N()}{THD\_FUNCTION()}}
+{\footnotesize\ttfamily static T\+H\+D\+\_\+\+F\+U\+N\+C\+T\+I\+ON (\begin{DoxyParamCaption}\item[{bldc\+Thread}]{,  }\item[{arg}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+\begin{DoxyCode}
+46                                    \{
+47   (void)arg;
+48   chRegSetThreadName(\textcolor{stringliteral}{"bldc"});
+49 \textcolor{comment}{//  bldcSinStart();}
+50     
+51   \textcolor{keywordflow}{while}(!chThdShouldTerminateX())\{
+52     chThdSleepMilliseconds(500);
+53   \}
+54 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{main_8c_a0a81efa818549039218f68caf657552d}\label{main_8c_a0a81efa818549039218f68caf657552d}} 
+\index{main.\+c@{main.\+c}!T\+H\+D\+\_\+\+W\+O\+R\+K\+I\+N\+G\+\_\+\+A\+R\+EA@{T\+H\+D\+\_\+\+W\+O\+R\+K\+I\+N\+G\+\_\+\+A\+R\+EA}}
+\index{T\+H\+D\+\_\+\+W\+O\+R\+K\+I\+N\+G\+\_\+\+A\+R\+EA@{T\+H\+D\+\_\+\+W\+O\+R\+K\+I\+N\+G\+\_\+\+A\+R\+EA}!main.\+c@{main.\+c}}
+\subsubsection{\texorpdfstring{T\+H\+D\+\_\+\+W\+O\+R\+K\+I\+N\+G\+\_\+\+A\+R\+E\+A()}{THD\_WORKING\_AREA()}}
+{\footnotesize\ttfamily static T\+H\+D\+\_\+\+W\+O\+R\+K\+I\+N\+G\+\_\+\+A\+R\+EA (\begin{DoxyParamCaption}\item[{wa\+\_\+bldc\+Thread}]{,  }\item[{128}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+\subsection{Variable Documentation}
+\mbox{\Hypertarget{main_8c_aac7dfdc32e0240ce7662d5a64f643608}\label{main_8c_aac7dfdc32e0240ce7662d5a64f643608}} 
+\index{main.\+c@{main.\+c}!ser\+\_\+cfg@{ser\+\_\+cfg}}
+\index{ser\+\_\+cfg@{ser\+\_\+cfg}!main.\+c@{main.\+c}}
+\subsubsection{\texorpdfstring{ser\+\_\+cfg}{ser\_cfg}}
+{\footnotesize\ttfamily Serial\+Config ser\+\_\+cfg\hspace{0.3cm}{\ttfamily [static]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}
+= \{
+    115200,     
+    0,          
+    0,          
+    0,          
+\}
+\end{DoxyCode}

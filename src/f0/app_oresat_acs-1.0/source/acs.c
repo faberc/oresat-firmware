@@ -8,7 +8,9 @@ event_listener_t el;
  * @note    
  *
  * @param[in] acs      pointer to the @p ACS object
- *                     @p ACS caonnot be NULL
+ * @note               ACS cannot be NULL
+ *
+ * 
  *
  * @api
  */

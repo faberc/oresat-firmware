@@ -1,0 +1,17 @@
+This is the template app for new applications.
+
+To create a new app, simply copy the app\+\_\+template directory and name it whatever you like.
+
+
+\begin{DoxyCode}
+cp -R app\_template app\_<name>
+\end{DoxyCode}
+
+
+If building for a specific board, update the {\ttfamily B\+O\+A\+RD =} line to the board defined in the {\ttfamily boards} directory
+
+Then, open the Makefile and edit the line {\ttfamily P\+R\+O\+J\+E\+CT =} to whatever name you chose\+: 
+\begin{DoxyCode}
+PROJECT   = app\_<name>
+\end{DoxyCode}
+ 
