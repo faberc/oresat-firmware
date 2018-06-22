@@ -39,7 +39,7 @@ $(TEST_BIN): $(TEST_OBJS)
 	$(CC) $(TEST_CFLAGS) -o $(TEST_BIN) $(TEST_OBJS)
 	@echo $(TEST_BIN) compiled!
 
-.c.o: 
+.c.o:  $(PROG_OBJS)
 	$(CC) $(FLAGS) -c $^ -o $@
 
 run:

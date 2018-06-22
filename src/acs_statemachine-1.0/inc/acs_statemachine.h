@@ -30,12 +30,13 @@ typedef enum {
 	END // this must be the last entry
 }acs_function;
 
-typedef struct{
-	acs_state last_state;
+typedef struct ACS ACS;
+
+struct ACS{
 	acs_state cur_state;
-	acs_state req_state;
 	acs_function function;
-}ACS;
+	int (*fn_exit)(ACS *acs);
+};
 
 typedef struct{
 	acs_state cur_state;

@@ -105,7 +105,6 @@ acs_function_rule func[] = {
 
 #define FUNC_COUNT (int)(sizeof(func)/sizeof(acs_function_rule))
 
-//*
 static int callFunction(ACS *acs){
 	int i;
 	acs_function function;
@@ -124,7 +123,6 @@ static int callFunction(ACS *acs){
 
 	return acs->cur_state;
 }
-//*/
 
 acs_transition_rule trans[] = {
 	{ST_RDY,			ST_RW,				&entry_rw,				&exit_rdy},
@@ -151,21 +149,6 @@ void print_welcome(){
 	print_state(ST_RW); printf(", ");
 	print_state(ST_MTQR); printf(", ");
 	print_state(ST_MAX_PWR); printf("\n");
-/*	
-	printf("event enum: "); 
-	printf("\t%d, \t%d, \t%d, \t %d, \t %d, \t %d, \t %d\n",
-			EV_ANY,EV_OFF,EV_INIT,EV_RDY,EV_RW,EV_MTQR,EV_REP);
-
-	printf("event names: \t"); 
-	print_event(EV_ANY); printf(", ");
-	print_event(EV_OFF); printf(", ");
-	print_event(EV_INIT); printf(", ");
-	print_event(EV_RDY); printf(", ");
-	print_event(EV_RW); printf(", ");
-	print_event(EV_MTQR); printf(", ");
-	print_event(EV_REP); printf("\n");
-	printf("TRANS_CNT: %d\n\n",TRANS_COUNT);
-//*/
 }
 
 acs_function requestFunction(ACS *acs){
@@ -187,7 +170,7 @@ acs_function requestFunction(ACS *acs){
 
 acs_state requestTransition(ACS *acs){
 	acs_state state;
-	char input[3]="";
+	char input[3]="\0";
 	int i;
 
 	printf("\nrequest state transition$ ");
@@ -198,16 +181,19 @@ acs_state requestTransition(ACS *acs){
 		return EXIT_FAILURE; 
 	}
 	printf("transition request %s received\n", state_name[state]);
+	printf("TRANS_COUNT: %d\n", TRANS_COUNT);
 	for (i = 0;i < TRANS_COUNT;++i){
-			if((acs->cur_state==trans[i].cur_state)&&(acs->req_state==trans[i].req_state)){
-				acs->cur_state = (trans[i].fn_entry)(acs);
-				acs->last_state = (trans[i].fn_exit)(acs);
-				break;
-			}
+		printf("(%d,%d),", acs->cur_state,trans[i].cur_state);
+		printf("(%d,%d)\n", state,trans[i].req_state);
+		if((acs->cur_state==trans[i].cur_state)&&(state==trans[i].req_state)){
+			acs->fn_exit(acs);
+			acs->fn_exit=trans[i].fn_exit;
+			acs->cur_state = (trans[i].fn_entry)(acs);
+			break;
 		}
-		printf("\n");
+	}
+	printf("\n");
 
-	acs->cur_state = state;	
 	return EXIT_SUCCESS;
 }
 
@@ -235,6 +221,7 @@ extern int acs_statemachine(ACS *acs){
 
 	printf("Starting state machine!\n\n");
 	acs->cur_state = entry_rdy(acs);
+	acs->fn_exit = exit_rdy;
 	printf("\nIntitializing ACS to state: %s\n\n",state_name[acs->cur_state]);
 	
 	while(1){
