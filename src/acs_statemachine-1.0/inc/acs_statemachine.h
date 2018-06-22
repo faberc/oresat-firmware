@@ -24,18 +24,17 @@ typedef enum{
 
 #define MAX_STATES (int)(sizeof(acs_state))
 
-//*
 typedef enum {
 	FN_RW_SETDC,
 	FN_MTQR_SETDC,
 	END // this must be the last entry
 }acs_function;
-//*/
 
 typedef struct{
 	acs_state last_state;
 	acs_state cur_state;
 	acs_state req_state;
+	acs_function function;
 }ACS;
 
 typedef struct{

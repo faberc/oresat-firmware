@@ -86,35 +86,36 @@ static int exit_max_pwr(ACS *acs){
 // functions
 static int fn_rw_setdc(ACS *acs){
 	(void)acs;
-	return printFunctionCall(FN_RW_SETDC,FUNC_STRING);
+	printFunctionCall(FN_RW_SETDC,FUNC_STRING);
+	return EXIT_SUCCESS;
 }
 
 static int fn_mtqr_setdc(ACS *acs){
 	(void)acs;
-	return printFunctionCall(FN_MTQR_SETDC,FUNC_STRING);
+	printFunctionCall(FN_MTQR_SETDC,FUNC_STRING);
 	return EXIT_SUCCESS;
 }
 
-//*
 acs_function_rule func[] = {
-	{ST_RW, 	FN_RW_SETDC,		&fn_rw_setdc},
-	{ST_MTQR, FN_MTQR_SETDC,	&fn_mtqr_setdc}
+	{ST_RW, 			FN_RW_SETDC,		&fn_rw_setdc},
+	{ST_MTQR, 		FN_MTQR_SETDC,	&fn_mtqr_setdc},
+	{ST_MAX_PWR, 	FN_RW_SETDC,		&fn_rw_setdc},
+	{ST_MAX_PWR, 	FN_MTQR_SETDC,	&fn_mtqr_setdc}
 };
 
-#define EVENT_COUNT (int)(sizeof(func)/sizeof(acs_function))
-//*/
+#define FUNC_COUNT (int)(sizeof(func)/sizeof(acs_function_rule))
 
-/*
+//*
 static int callFunction(ACS *acs){
-	printf("%sfsm_trap, keeping state!\n",TRAP_STRING);	
-	int i,trap_status;
+	int i;
+	acs_function function;
 
-	for(i = 0;i < EVENT_COUNT;++i){
-		if(acs->cur_state == trap[i].state){
-			if((acs->event == trap[i].event)){
-				trap_status = (trap[i].fn)(acs);
-				if(trap_status){
-					printf("trap error!\n");
+	for(i = 0;i < FUNC_COUNT;++i){
+		if(acs->cur_state == func[i].state){
+			if((acs->function == func[i].function)){
+				function = (func[i].fn)(acs);
+				if(function){
+					printf("function call error!\n");
 				}
 				break;
 			}
@@ -167,35 +168,37 @@ void print_welcome(){
 //*/
 }
 
+acs_function requestFunction(ACS *acs){
+	acs_function function;
+	char input[3]="";
+
+	printf("\nrequest function call$ ");
+	scanf(" %s", input);
+	function = atoi(input);
+	if(function < 0 || function >= FUNC_COUNT){
+		printf("error, invalid function call: %d\n",function);
+		return EXIT_FAILURE; 
+	}
+	printf("function call request %s received\n", function_name[function]);
+	acs->function = function;
+	callFunction(acs);
+	return EXIT_SUCCESS;
+}
+
 acs_state requestTransition(ACS *acs){
 	acs_state state;
-	char input[3]="-1\n";
+	char input[3]="";
+	int i;
 
-	printf("current state: %d ",acs->cur_state);
-	print_state(acs->cur_state);
-	printf("\nrequest state? ");
+	printf("\nrequest state transition$ ");
 	scanf(" %s", input);
 	state = atoi(input);
 	if(state < 0 || state >= MAX_STATES){
-		printf("error, invalid state: %d\n",state);
-		return acs->cur_state; 
+		printf("error, invalid state tranition: %d\n",state);
+		return EXIT_FAILURE; 
 	}
 	printf("transition request %s received\n", state_name[state]);
-	return state;
-}
-
-extern int acs_statemachine(ACS *acs){
-	int i;
-
-	print_welcome();
-
-	printf("Starting state machine!\n\n");
-	acs->cur_state = entry_rdy(acs);
-	printf("\nIntitializing ACS to state: %s\n\n",state_name[acs->cur_state]);
-	
-	while(1){
-		acs->req_state = requestTransition(acs);
-		for (i = 0;i < TRANS_COUNT;++i) {
+	for (i = 0;i < TRANS_COUNT;++i){
 			if((acs->cur_state==trans[i].cur_state)&&(acs->req_state==trans[i].req_state)){
 				acs->cur_state = (trans[i].fn_entry)(acs);
 				acs->last_state = (trans[i].fn_exit)(acs);
@@ -203,6 +206,39 @@ extern int acs_statemachine(ACS *acs){
 			}
 		}
 		printf("\n");
+
+	acs->cur_state = state;	
+	return EXIT_SUCCESS;
+}
+
+int handleEvents(ACS *acs){
+	int event;
+	char input[3]="";
+	printf("current state: %d ",acs->cur_state);
+	print_state(acs->cur_state);
+	
+	printf("\nevent$ ");
+	scanf(" %s", input);
+	event = atoi(input);
+	if(event == 0){
+		requestTransition(acs);
+	}else if(event == 1){
+		requestFunction(acs);
+	}else{
+		return EXIT_FAILURE;
+	}
+	return EXIT_SUCCESS;
+}
+
+extern int acs_statemachine(ACS *acs){
+	print_welcome();
+
+	printf("Starting state machine!\n\n");
+	acs->cur_state = entry_rdy(acs);
+	printf("\nIntitializing ACS to state: %s\n\n",state_name[acs->cur_state]);
+	
+	while(1){
+		handleEvents(acs);
 	}
 	
 	return EXIT_SUCCESS;
