@@ -5,8 +5,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define EXIT_SUCCESS 0
-#define EXIT_FAILURE 1
+//#define EXIT_SUCCESS 0
+//#define EXIT_FAILURE 1
 
 #define ENTRY_STRING 	"*Entering state: " 
 #define EXIT_STRING  	"*Exiting state: " 
@@ -14,6 +14,12 @@
 
 extern char *state_name[];
 extern char *event_name[];
+
+typedef enum{
+//	EXIT_SUCCESS,
+//	EXIT_FAILURE,
+	ERROR_THING
+}return_code;
 
 typedef enum{
 	ST_RDY,		// low power
@@ -24,10 +30,10 @@ typedef enum{
 
 #define MAX_STATES (int)(sizeof(acs_state))
 
-typedef enum {
+typedef enum{
 	FN_RW_SETDC,
-	FN_MTQR_SETDC,
-	END // this must be the last entry
+	FN_MTQR_SETDC//,
+	//END // this must be the last entry
 }acs_function;
 
 typedef struct ACS ACS;

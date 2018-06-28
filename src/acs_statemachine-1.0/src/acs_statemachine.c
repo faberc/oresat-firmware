@@ -9,8 +9,8 @@ char *state_name[] = {
 
 char *function_name[] = {
 	"FN_RW_SETDC",
-	"FN_MTQR_SETDC",
-	"END"
+	"FN_MTQR_SETDC"//,
+//	"END"
 };
 
 static void print_name(char *name){
@@ -47,7 +47,7 @@ static int entry_rdy(ACS *acs){
 
 static int exit_rdy(ACS *acs){
 	(void)acs;
-	return printTransition(ST_RDY,EXIT_STRING);;
+	return printTransition(ST_RDY,EXIT_STRING);
 }
 
 // ST_RW state transistion functions
@@ -199,7 +199,7 @@ acs_state requestTransition(ACS *acs){
 
 int handleEvents(ACS *acs){
 	int event;
-	char input[3]="";
+	char input[3]="\0";
 	printf("current state: %d ",acs->cur_state);
 	print_state(acs->cur_state);
 	
