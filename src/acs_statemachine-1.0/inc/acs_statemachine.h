@@ -4,16 +4,41 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-//#define EXIT_SUCCESS 0
-//#define EXIT_FAILURE 1
+#include <stdint.h>
 
 #define ENTRY_STRING 	"*Entering state: " 
 #define EXIT_STRING  	"*Exiting state: " 
 #define FUNC_STRING 	"*Calling function: " 
 
+#define CAN_BUF_SIZE	8
+
+typedef uint8_t CAN_STATUS[CAN_BUF_SIZE];
+typedef uint8_t CAN_MESSAGE[CAN_BUF_SIZE];
+
 extern char *state_name[];
 extern char *event_name[];
+
+typedef enum{
+	ERROR_CODE=0,		//BYTE0
+	STATE,					//BYTE1
+	LAST_STATE,			//BYTE2
+	STATUS3,				//BYTE3
+	STATUS4,				//BYTE4
+	STATUS5,				//BYTE5
+	STATUS6,				//BYTE6
+	STATUS7					//BYTE7
+}status_buf;
+
+typedef enum{
+	CMD=0,					//BYTE0
+	MSG1,						//BYTE1
+	MSG2,						//BYTE2
+	MSG3,						//BYTE3
+	MSG4,						//BYTE4
+	MSG5,						//BYTE5
+	MSG6,						//BYTE6
+	MSG7						//BYTE7
+}message_buf;
 
 typedef enum{
 //	EXIT_SUCCESS,
@@ -33,7 +58,6 @@ typedef enum{
 typedef enum{
 	FN_RW_SETDC,
 	FN_MTQR_SETDC//,
-	//END // this must be the last entry
 }acs_function;
 
 typedef struct ACS ACS;

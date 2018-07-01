@@ -9,8 +9,7 @@ char *state_name[] = {
 
 char *function_name[] = {
 	"FN_RW_SETDC",
-	"FN_MTQR_SETDC"//,
-//	"END"
+	"FN_MTQR_SETDC"
 };
 
 static void print_name(char *name){
