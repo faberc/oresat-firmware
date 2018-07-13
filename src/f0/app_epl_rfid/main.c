@@ -20,58 +20,97 @@
 #include "chprintf.h"
 
 //=== Project header files
-#include "oresat.h"
-
-#include "thread1.h"
+#include "epl_rfid.h"
 
 //=== Serial configuration
-static SerialConfig ser_cfg =
-{
-    115200,     //Baud rate
-    0,          //
-    0,          //
-    0,          //
+static SerialConfig ser_cfg ={
+	115200,     //Baud rate
+	0,          //
+	0,          //
+	0,          //
 };
 
+#if 1
+static const I2CConfig i2cconfig = {
+  STM32_TIMINGR_PRESC(8U)  |            /* 72MHz/9 = 8MHz I2CCLK.           */
+  STM32_TIMINGR_SCLDEL(3U) | STM32_TIMINGR_SDADEL(3U) |
+  STM32_TIMINGR_SCLH(3U)   | STM32_TIMINGR_SCLL(9U),
+  0,
+  0
+};
+#endif
+#if 0
+static const I2CConfig i2cconfig = {
+  STM32_TIMINGR_PRESC(15U) |
+  STM32_TIMINGR_SCLDEL(4U) | STM32_TIMINGR_SDADEL(2U) |
+  STM32_TIMINGR_SCLH(15U)  | STM32_TIMINGR_SCLL(21U),
+  0,
+  0
+};
+#endif
 
 static void app_init(void) {
-    //=== App initialization
+	//=== App initialization
 
-    // Start up debug output
-    sdStart(&SD2, &ser_cfg);
-
+	i2cStart(&I2CD1, &i2cconfig);
+	// Start up debug output
+	sdStart(&SD2, &ser_cfg);
 }
 
-static void main_app(void) {
-    //=== Start application threads
+static void app_main(void) {
+/*
+	chThdCreateStatic(
+		waThread_epl_rfid, 
+		sizeof(waThread_epl_rfid), 
+		NORMALPRIO, 
+		Thread_epl_rfid, 
+		NULL
+	);
+//*/
+	/*
+	 * Begin main loop
+	 */
+	while(true){
+    unsigned i;
+    msg_t msg;
+    static const uint8_t cmd[] = {0, 0};
+    uint8_t data[16];
 
-    //Example thread creation
-    chThdCreateStatic(waThread1, sizeof(waThread1), NORMALPRIO, Thread1, NULL);
-
-    /*
-     * Begin main loop
-     */
-    while (true)
-    {
-        chThdSleepMilliseconds(1000);
+    msg = i2cMasterTransmitTimeout(
+			&I2CD1, 0x52, 
+			cmd, sizeof(cmd),
+      data, sizeof(data), 
+			TIME_INFINITE
+		);
+    if (msg != MSG_OK){
+			palToggleLine(LINE_LED_GREEN);
+		}
+//*
+		for (i = 0; i < 256; ++i) {
+      msg = i2cMasterReceiveTimeout(
+				&I2CD1, 0x52,
+        data, sizeof(data), 
+				TIME_INFINITE
+			);
+      if (msg != MSG_OK){
+    		palToggleLine(LINE_LED_GREEN);
+			}
     }
+//*/
+    chThdSleepMilliseconds(500);
+    palToggleLine(LINE_LED_GREEN);
+
+	//	chThdSleepMilliseconds(1000);
+	}
 }
 
 int main(void) {
-    /*
-     * System initializations.
-     * - HAL initialization, this also initializes the configured device drivers
-     *   and performs the board-specific initializations.
-     * - Kernel initialization, the main() function becomes a thread and the
-     *   RTOS is active.
-     */
-    halInit();
-    chSysInit();
-    oresat_init(0);
+	halInit();
+	chSysInit();
 
-    // Initialize and start app
-    app_init();
-    main_app();
+	// Initialize and start app
+	app_init();
+	app_main();
 
-    return 0;
+	return 0;
 }
