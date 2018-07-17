@@ -30,7 +30,7 @@ static SerialConfig ser_cfg ={
 	0,          //
 };
 
-#if 1
+#if 0
 static const I2CConfig i2cconfig = {
   STM32_TIMINGR_PRESC(8U)  |            /* 72MHz/9 = 8MHz I2CCLK.           */
   STM32_TIMINGR_SCLDEL(3U) | STM32_TIMINGR_SDADEL(3U) |
@@ -39,7 +39,7 @@ static const I2CConfig i2cconfig = {
   0
 };
 #endif
-#if 0
+#if 1
 static const I2CConfig i2cconfig = {
   STM32_TIMINGR_PRESC(15U) |
   STM32_TIMINGR_SCLDEL(4U) | STM32_TIMINGR_SDADEL(2U) |
@@ -74,7 +74,7 @@ static void app_main(void) {
     unsigned i;
     msg_t msg;
     static const uint8_t cmd[] = {0, 0};
-    uint8_t data[16];
+    uint8_t data[16] = "123456789ABCD";
 
     msg = i2cMasterTransmitTimeout(
 			&I2CD1, 0x52, 
@@ -85,7 +85,7 @@ static void app_main(void) {
     if (msg != MSG_OK){
 			palToggleLine(LINE_LED_GREEN);
 		}
-//*
+/*
 		for (i = 0; i < 256; ++i) {
       msg = i2cMasterReceiveTimeout(
 				&I2CD1, 0x52,
@@ -98,7 +98,7 @@ static void app_main(void) {
     }
 //*/
     chThdSleepMilliseconds(500);
-    palToggleLine(LINE_LED_GREEN);
+//    palToggleLine(LINE_LED_GREEN);
 
 	//	chThdSleepMilliseconds(1000);
 	}
