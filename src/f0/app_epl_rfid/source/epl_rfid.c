@@ -13,3 +13,33 @@ THD_FUNCTION(Thread_epl_rfid, arg) {
     chThdSleepMilliseconds(500);
   }
 }
+
+THD_WORKING_AREA(waThread_15625Hz,THREAD_SIZE);
+THD_FUNCTION(Thread_15625, arg) {
+  (void)arg;
+  chRegSetThreadName("Thread_15.625");
+
+  while (!chThdShouldTerminateX()) {
+	/*
+    palClearLine(LINE_LED_GREEN);
+    chThdSleepMilliseconds(500);
+    palSetLine(LINE_LED_GREEN);
+	//*/
+    chThdSleepMilliseconds(500);
+  }
+}
+
+THD_WORKING_AREA(waThread_12500Hz,THREAD_SIZE);
+THD_FUNCTION(Thread_12500Hz, arg) {
+  (void)arg;
+  chRegSetThreadName("Thread_12.5KHz");
+
+  while (!chThdShouldTerminateX()) {
+	/*
+    palClearLine(LINE_LED_GREEN);
+    chThdSleepMilliseconds(500);
+    palSetLine(LINE_LED_GREEN);
+	//*/
+    chThdSleepMilliseconds(500);
+  }
+}

@@ -71,7 +71,7 @@ static void app_main(void) {
 	 * Begin main loop
 	 */
 	while(true){
-    unsigned i;
+//    unsigned i;
     msg_t msg;
     static const uint8_t cmd[] = {0, 0};
     uint8_t data[16] = "123456789ABCD";
