@@ -52,25 +52,12 @@ static const I2CConfig i2cconfig = {
 static void app_init(void) {
 	//=== App initialization
 
-	i2cStart(&I2CD1, &i2cconfig);
+	//i2cStart(&I2CD1, &i2cconfig);
 	// Start up debug output
 	sdStart(&SD2, &ser_cfg);
 }
 
-static void app_main(void) {
-/*
-	chThdCreateStatic(
-		waThread_epl_rfid, 
-		sizeof(waThread_epl_rfid), 
-		NORMALPRIO, 
-		Thread_epl_rfid, 
-		NULL
-	);
-//*/
-	/*
-	 * Begin main loop
-	 */
-	while(true){
+static void testI2C(void){
 //    unsigned i;
     msg_t msg;
     static const uint8_t cmd[] = {0, 0};
@@ -97,10 +84,29 @@ static void app_main(void) {
 			}
     }
 //*/
-    chThdSleepMilliseconds(500);
+}
+
+static void app_main(void) {
+//*
+	chThdCreateStatic(
+		waThread_epl_rfid, 
+		sizeof(waThread_epl_rfid), 
+		NORMALPRIO, 
+		Thread_epl_rfid, 
+		NULL
+	);
+//*/
+
+	/*
+	 * Begin main loop
+	 */
+	while(true){
+		//testI2C();
+
+//    chThdSleepMilliseconds(500);
 //    palToggleLine(LINE_LED_GREEN);
 
-	//	chThdSleepMilliseconds(1000);
+		chThdSleepMilliseconds(1000);
 	}
 }
 
