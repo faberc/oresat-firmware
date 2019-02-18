@@ -38,7 +38,7 @@ static void app_init(void) {
     sdStart(&SD2, &ser_cfg);
     
     float test = 11.2;
-    chprintf(DEBUG_CHP, "%d\n\r",test* 10);
+    chprintf(DEBUG_CHP, "%d\n\r",(int)(test * 10));
     chprintf(DEBUG_CHP, "%f\n\r",test);
 }
 
