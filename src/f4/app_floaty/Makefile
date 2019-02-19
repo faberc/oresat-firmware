@@ -6,7 +6,7 @@
 # Compiler options here.
 ifeq ($(USE_OPT),)
   USE_OPT = -Og -ggdb -fomit-frame-pointer -falign-functions=16 -lm
-	USE_OPT += -mfloat-abi=hard -mfpu=fpv5-sp-d16 -fsingle-precision-constant
+	#USE_OPT += -mfloat-abi=hard -mfpu=fpv5-sp-d16 -fsingle-precision-constant
 endif
 
 # C specific options here (added to USE_OPT).
@@ -71,7 +71,7 @@ ifeq ($(USE_EXCEPTIONS_STACKSIZE),)
 endif
 
 # Enables the use of FPU (no, softfp, hard).
-ifeq ($(USE_FPU),yes)
+ifeq ($(USE_FPU),)
   #USE_FPU = no
   USE_FPU = hard
   #USE_FPU = softfp
@@ -222,7 +222,7 @@ CPPWARN = -Wall -Wextra -Wundef
 #
 
 # List all user C define here, like -D_DEBUG=1
-UDEFS = 
+UDEFS = -DCHPRINTF_USE_FLOAT=1
 
 # Define ASM defines here
 UADEFS =
