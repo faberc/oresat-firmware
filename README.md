@@ -13,7 +13,7 @@ In order to have a working environment, you must initialize the ChibiOS and CANo
 To initialize the submodules, or to resync after submodule references are updated, run:
 ```git submodule update --init```
 
-This project requires `make`, `arm-none-eabi-gcc`, `arm-none-eabi-gdb`, and `openocd` to build/write/debug. Refer to your OS documentation or package installation tool to determine how to install these tools.
+This project requires `make`, `gcc-arm-none-eabi`, `gdb-arm-none-eabi`, and `openocd` to build/write/debug. Refer to your OS documentation or package installation tool to determine how to install these tools.
 
 ### Creating an app
 Once you have a working toolchain in place, the next step is to copy an existing app_template for your microcontroller to a new app_projectname. The currently supported MCUs for OreSat are listed below, and link to the relevant folders and READMEs.
