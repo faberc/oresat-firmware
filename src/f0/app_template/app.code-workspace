@@ -1,0 +1,21 @@
+{
+	"folders": [
+		{
+			"name": "app",
+			"path": "."
+		},
+		{
+			"name": "ChibiOS",
+			"path": "../../../ChibiOS"
+		},
+		{
+			"name": "boards",
+			"path": "../../../boards"
+		},
+		{
+			"name": "common",
+			"path": "../../../common"
+		}
+	],
+	"settings": {}
+}
