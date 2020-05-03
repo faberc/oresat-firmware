@@ -21,7 +21,7 @@
 /* Remove */
 #include "chprintf.h"
 
-#define MMC5883_SADDR 0x60
+#define MMC5883_SADDR 0x30
 
 // MMC5883 Registers
 #define MMC5883_XOUT_LSB 0x00
