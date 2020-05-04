@@ -41,9 +41,16 @@ static const I2CConfig i2cconfig = {
 typedef union {
     struct __attribute__((packed)) {
         uint8_t reg;
-        uint8_t byte;
+        union {
+            struct __attribute__((packed)) {
+                uint16_t x;
+                uint16_t y;
+                uint16_t z;
+            };
+            uint8_t data[6];
+        };
     };
-    uint8_t buf[2];
+    uint8_t buf[7];
 } i2cbuf_t;
 
 int main(void)
@@ -58,10 +65,7 @@ int main(void)
     halInit();
     chSysInit();
 
-    uint8_t data[6];
-    uint8_t rxbuf[1];
-    i2cbuf_t txbuf;
-    uint16_t x, y, z;
+    i2cbuf_t i2cbuf;
 
     sdStart(&SD2, NULL);
 
@@ -69,36 +73,35 @@ int main(void)
 
         while (true)
         {
-            txbuf.reg = MMC5883_CTRL0_REG;
-            txbuf.byte = 0x01;
-
-            chprintf((BaseSequentialStream*)&SD2, "txbuf: %x\r\n", txbuf.buf);
+            i2cbuf.reg = MMC5883_CTRL0_REG;
+            i2cbuf.data[0] = 0x01;
+            
+            // DEBUG: Print out whole buffer just to see what's going on.
+            chprintf((BaseSequentialStream*)&SD2, "i2cbuf: %x\r\n", i2cbuf.buf);
 
             // Write 0x01 to control register
-            i2cMasterTransmitTimeout(&I2CD1, MMC5883_SADDR, txbuf.buf, sizeof(txbuf), NULL, 0, TIME_INFINITE);
+            i2cMasterTransmitTimeout(&I2CD1, MMC5883_SADDR, i2cbuf.buf, 2, NULL, 0, TIME_INFINITE);
 
-            txbuf.reg = MMC5883_STAT_REG;
+            i2cbuf.reg = MMC5883_STAT_REG;
             
             // Continuously read status register until bit 0 is a 1.
             do {
-                i2cMasterTransmitTimeout(&I2CD1, MMC5883_SADDR, &txbuf.reg, sizeof(txbuf.reg), rxbuf, sizeof(rxbuf), TIME_INFINITE);
-            } while (!(rxbuf[0] & 0x01));
+                i2cMasterTransmitTimeout(&I2CD1, MMC5883_SADDR, &i2cbuf.reg, sizeof(i2cbuf.reg), i2cbuf.data, 1, TIME_INFINITE);
+            } while (!(i2cbuf.data[0] & 0x01));
 
             chprintf((BaseSequentialStream*)&SD2, "Measurement Complete\r\n");
 
             // Read from XOUT LSB values -- device will increment through 6 registers and read all axes.
-            txbuf.reg = MMC5883_XOUT_LSB;
-            i2cMasterTransmitTimeout(&I2CD1, MMC5883_SADDR, &txbuf.reg, sizeof(txbuf.reg), data, 6, TIME_INFINITE);
+            i2cbuf.reg = MMC5883_XOUT_LSB;
+            i2cMasterTransmitTimeout(&I2CD1, MMC5883_SADDR, &i2cbuf.reg, sizeof(i2cbuf.reg), i2cbuf.data, sizeof(i2cbuf.data), TIME_INFINITE);
 
+            // DEBUG: Print out each byte just to see what's going on.
             for (int i; i < 6; i++){
-                chprintf((BaseSequentialStream*)&SD2, "%u\r\n", data[i]);
+                chprintf((BaseSequentialStream*)&SD2, "%u\r\n", i2cbuf.data[i]);
             }
 
-            x = (data[1] << 8) + data[0];
-            y = (data[3] << 8) + data[2];
-            z = (data[5] << 8) + data[4];
-
-            chprintf((BaseSequentialStream*)&SD2, "X= %u, Y=%u, Z=%u\r\n", x, y, z);
+            // Print out x, y, and z magnetic field axis measurements.
+            chprintf((BaseSequentialStream*)&SD2, "X= %u, Y=%u, Z=%u\r\n", i2cbuf.x, i2cbuf.y, i2cbuf.z);
             chThdSleepMilliseconds(2000);
         }
 
